@@ -5,6 +5,7 @@ class Video_player{
         this.$play_pause_button = this.$video_player.querySelector('.js_play_pause_button')
         this.$play_pause_button_icon = this.$play_pause_button.querySelectorAll('svg')
         this.set_play_pause()
+        this.
         this.set_volume()
     }
     // play pause button
