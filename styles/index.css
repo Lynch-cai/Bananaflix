@@ -1,11 +1,19 @@
 body{
-    padding: 80px;
+    padding: 0;
+    margin: 0;
 }
 
-.player video{
+.video_player{
+    margin: 0 auto;
+    width: 1280px;
+    position: relative;
+}
+
+.video_player video{
     object-fit: cover;
     width: 1280px;
 }
+
 /* 
 .player .seek-bar{
     position: relative;
@@ -25,3 +33,47 @@ body{
     transform-origin: 0 0;
     will-change: transform;
 } */
+
+/* Play pause button */
+.play_pause_button {
+    border: 0;
+    background: transparent;
+    position: absolute;
+    left: 30px;
+    bottom: 10px;
+    cursor: pointer;
+    outline: 0;
+    user-select: none;
+  }
+.play_pause_button .play_pause_icon{
+      width: 25px;
+      fill: white;
+      position: absolute;
+      left: 30px;
+      bottom: 10px;
+}
+.fade-out{
+    animation: fade 0.15s ease forwards;
+}
+@keyframes fade{
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+/* volume slider */
+.volume_slider{
+    position: absolute;
+    left: 45px;
+    bottom: 10px;
+}
+
+.volume_slider .volume_icon{
+    height: 30px;
+    fill: white;
+    position: absolute;
+    left: 100px;
+    bottom: 10px;
+}
