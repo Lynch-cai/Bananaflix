@@ -35,15 +35,12 @@ class Video_player{
         this.$volume_button.addEventListener(
             'click',
             ()=>{
+                this.$volume_button_muted.classList.toggle('active')
                 if (this.$video.volume > 0){
                     this.$video.volume = 0
-                    this.$volume_button_muted.classList.add('active')
-                    this.$volume_button_muted.classList.remove('inactive')
                 }
                 else if(this.$video.volume == 0){
                     this.$video.volume = 0.5
-                    this.$volume_button_muted.classList.add('inactive')
-                    this.$volume_button_muted.classList.remove('active')
                 }
             }
         )
