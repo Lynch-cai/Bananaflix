@@ -5,7 +5,14 @@ class Video_player{
         this.$play_pause_button = this.$video_player.querySelector('.js_play_pause_button')
         this.$play_pause_button_icon = this.$play_pause_button.querySelectorAll('svg')
         this.set_play_pause()
-        this.
+        this.$volume_button = this.$video_player.querySelector('.js_volume_button')
+        this.$volume_button_muted = this.$volume_button.querySelector('.js_volume_button_muted')
+        this.$volume_slider_container = this.$video_player.querySelector('.js_volume_slider_container')
+        this.$volume_slider_min = this.$volume_slider_container.querySelector('.js_volume_slider_min')
+        this.$volume_slider_max = this.$volume_slider_container.querySelector('.js_volume_slider_max')
+        this.$volume_slider_bar_container = this.$volume_slider_container.querySelector('.js_volume_slider_bar_container')
+        this.$volume_slider_bar = this.$volume_slider_bar_container.querySelector('.js_volume_slider_bar')
+        this.$volume_slider_bar_level = this.$volume_slider_bar_container.querySelector('.js_volume_slider_bar_level')
         this.set_volume()
     }
     // play pause button
@@ -24,7 +31,36 @@ class Video_player{
         )
     }
     set_volume(){
-        
+        // volume button - set volume min 
+        this.$volume_button.addEventListener(
+            'click',
+            ()=>{
+                if (this.$video.volume > 0){
+                    this.$video.volume = 0
+                    this.$volume_button_muted.classList.add('active')
+                    this.$volume_button_muted.classList.remove('inactive')
+                }
+                else if(this.$video.volume == 0){
+                    this.$video.volume = 0.5
+                    this.$volume_button_muted.classList.add('inactive')
+                    this.$volume_button_muted.classList.remove('active')
+                }
+            }
+        )
+        // set volume min
+        this.$volume_slider_min.addEventListener(
+            'click',
+            ()=>{
+                this.$video.volume = 0
+            }
+        )
+        // set volume max
+        this.$volume_slider_max.addEventListener(
+            'click',
+            () => {
+                this.$video.volume = 1
+            }
+        )
     }
 }
 

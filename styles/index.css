@@ -86,13 +86,38 @@ body{
     outline: 0;
 }
 
+.volume_button_muted{
+    width: 30px;
+    height: 2px;
+    background: white;
+    transform: rotate(45deg);
+    box-shadow: 0.5px -0.5px black;
+    z-index: 1;
+    /* opacity: 0; */
+}
+
+.volume_button_muted.active{
+    animation: volume_muted 0.75s cubic-bezier(0.8, 0, 0.2, 1) backwards;
+}
+
+.volume_button_muted.inactive{
+    animation: volume_muted 0.75s cubic-bezier(0.8, 0, 0.2, 1) forwards reverse;
+}
+
+@keyframes volume_muted{
+    0% {transform: rotate(45deg) scaleX(0); opacity: 1;}
+    100% {transform: rotate(45deg) scaleX(1); opacity: 1;}
+}
+
+
 .volume_button .volume_icon{
     position: absolute;
     height: 20px;
     fill: white;
 }
 
-.volume_slider_bar_container{
+
+.volume_slider_container{
     position: absolute;
     left: 130px; /* .volume_slider width + volume_slider left */
     bottom: 0px;
@@ -100,20 +125,20 @@ body{
     width: 80px; /* .volume_slider_bar width + .volume_slider_set_volume_min width + .volume_slider_set_volume_max*/
     cursor: pointer;
 }
-.volume_slider_set_volume_min{
+.volume_slider_min{
     position: absolute;
     height: 50px;
     width: 5px;
     cursor: pointer;
 }
-.volume_slider_set_volume_max{
+.volume_slider_max{
     position: absolute;
     left: 75px; /* .volume_slider_bar width + .volume_slider_set_volume_min width */ 
     height: 50px;
     width: 5px;
     cursor: pointer;
 }
-.volume_slider_bar_container .volume_slider_bar_set_volume_container{
+.volume_slider_container .volume_slider_bar_container{
     position: absolute;
     left: 5px; /* .volume_slider_set_volume_min width */ 
     height: 50px;
