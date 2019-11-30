@@ -94,6 +94,7 @@ body{
     transform: translate(5px, -11px) rotate(45deg) scaleX(0);
     z-index: 1;
     transform-origin: top left;
+    will-change: transform;
 }
     /* muted bar shadow */
 .volume_button_muted::after{
@@ -102,9 +103,10 @@ body{
     width: 32px;
     height: 1px;
     background: black;
-    transform: translate(-14px, -1px);
+    transform: translate(-16px, -1px);
     z-index: -1;
     opacity: 0.6;
+    will-change: transform;
 }
 
 .volume_button_muted.active{
@@ -115,10 +117,8 @@ body{
 }
 
 @keyframes volume_muted{
-    0% {transform: translate(5px, -11px) rotate(45deg) scaleX(0); 
-        opacity: 1;}
-    100% {transform: translate(5px, -11px) rotate(45deg) scaleX(1); 
-        opacity: 1;}
+    0% {transform: translate(5px, -11px) rotate(45deg) scaleX(0);}
+    100% {transform: translate(5px, -11px) rotate(45deg) scaleX(1);}
 }
 
 
@@ -169,9 +169,10 @@ body{
     outline: 0;
     cursor: pointer;
 }
-.volume_slider_bar_container .volume_slider_bar_level{
+.volume_slider_bar_container .volume_slider_bar_pin{
     position: absolute;
-    left: 60px; /* 0 for min volume to 60 for max volume */
+    left: 0px; 
+    transform: translateX(0px); /* 0 for min volume to 60 for max volume */
     top: calc(50% - 5px); /* 50% - height/2 */
     border-radius: 60px;
     height: 10px;
@@ -179,4 +180,18 @@ body{
     background: #FFEA00;
     outline: 0;
     cursor: pointer;
+    will-change: transform;
+}
+.volume_slider_bar_container .volume_slider_bar_level{
+    position: absolute;
+    top: calc(50% - 1.25px); /* 50% - height/2 */
+    transform: scaleX(60px); /* 0 for min volume to 60 for max volume */
+    border-radius: 60px;
+    height: 2.5px;
+    width: 1px;
+    background: #FFEA00;
+    outline: 0;
+    cursor: pointer;
+    transform-origin: left;
+    will-change: transform;
 }

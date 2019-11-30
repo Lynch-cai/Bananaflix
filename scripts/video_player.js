@@ -13,6 +13,8 @@ class Video_player{
         this.$volume_slider_bar_container = this.$volume_slider_container.querySelector('.js_volume_slider_bar_container')
         this.$volume_slider_bar = this.$volume_slider_bar_container.querySelector('.js_volume_slider_bar')
         this.$volume_slider_bar_level = this.$volume_slider_bar_container.querySelector('.js_volume_slider_bar_level')
+        this.$volume_slider_bar_pin = this.$volume_slider_bar_container.querySelector('.js_volume_slider_bar_pin')
+
         this.set_volume()
     }
     // play pause button
@@ -80,6 +82,7 @@ class Video_player{
             }
         )
 
+        // volume slider
         this.$volume_slider_bar_container.addEventListener(
             'mousedown',
             ()=>{
@@ -87,14 +90,34 @@ class Video_player{
                     'mousemove',
                     (_event)=>{
                         const bounding = this.$volume_slider_bar.getBoundingClientRect()
-                        const ratio = (_event.clientX - bounding.left) / bounding.width
-                        this.$video.volume = Math.floor((ratio*50))/50 // volume step set to 0.02 (1/50 = 0.02)
-                        console.log(this.$video.volume);
+                        const ratio = (_event.clientX - bounding.left -5) / (bounding.width-10) // pin width = 5px 
+                        let temp = Math.floor(((ratio)*50))/50
+                        // include volume in 0 to 1
+                        if (temp > 1)
+                            temp = 1
+                        else if (temp < 0){
+                            temp = 0
+                        }
+                        this.$video.volume = temp
                         this.check_volume_min_max()
+                        this.$volume_slider_bar_pin.style.transform = `translate(${temp*100/(100/60)}px)`
+                        this.$volume_slider_bar_level.style.transform = `scaleX(${temp*100/(100/70)})`
+                        this.$volume_slider_bar_container.removeEventListener(
+                            'mouseup',
+                            ()=>{
+                               // cancel mousedown addeventlistener
+                            }
+                        )
                     }
                 )
             }
         )
+
+
+
+
+
+
     }
 
 }
