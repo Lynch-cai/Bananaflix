@@ -1,13 +1,14 @@
 class Video_player{
     constructor(){
         this.$video_player = document.querySelector('.js_video_player')
-        this.$video = this.$video_player.querySelector('video')
+        this.$video = this.$video_player.querySelector('.js_main_video')
         this.$video.volume = 0.5
         
         this.$seek_bar_container = this.$video_player.querySelector('.js_seek_bar_container')
         this.$seek_bar_pin = this.$seek_bar_container.querySelector('.js_seek_bar_pin')
         this.$seek_bar_current = this.$seek_bar_container.querySelector('.js_seek_bar_current')
         this.$seek_bar = this.$seek_bar_container.querySelector('.js_seek_bar')
+        this.$thumbnail_video = this.$video_player.querySelector('.js_thumbnail_video')
         this.set_seek_bar()
         this.$play_pause_button = this.$video_player.querySelector('.js_play_pause_button')
         this.$play_pause_button_icon = this.$play_pause_button.querySelectorAll('svg')
@@ -23,7 +24,7 @@ class Video_player{
         this.$volume_slider_bar_pin = this.$volume_slider_bar_container.querySelector('.js_volume_slider_bar_pin')
         this.set_volume()
         this.$video_show_time = this.$video_player.querySelector('.js_video_show_time')
-        this.set_show_time()
+        // this.set_show_time()
     }
     // play pause button
     set_play_pause(){
@@ -142,67 +143,120 @@ class Video_player{
     }
     // set seek bar
     set_seek_bar(){
-        // seek bar & seek bar pin animation class
+        // seek bar & seek bar pin & thumbnail video animation class
         this.$seek_bar_container.addEventListener(
             'mouseenter',
             ()=>{
             this.$seek_bar.classList.remove('inactive')
             this.$seek_bar_current.classList.remove('inactive')
             this.$seek_bar_pin.classList.remove('inactive')
+            this.$thumbnail_video.classList.remove('inactive')
             window.requestAnimationFrame(()=>{
                 window.requestAnimationFrame(()=>{
                     this.$seek_bar.classList.add('active')
                     this.$seek_bar_current.classList.add('active')
                     this.$seek_bar_pin.classList.add('active')
+                    this.$thumbnail_video.classList.add('active')
                 })
             })
         })
-        // seek bar & seek bar pin animation class
+        // seek bar & seek bar pin & thumbnail video animation class
         this.$seek_bar_container.addEventListener(
             'mouseleave',
             ()=>{
             this.$seek_bar.classList.remove('active')
             this.$seek_bar_current.classList.remove('active')
             this.$seek_bar_pin.classList.remove('active')
+            this.$thumbnail_video.classList.remove('active')
             window.requestAnimationFrame(()=>{
                 window.requestAnimationFrame(()=>{
                     this.$seek_bar.classList.add('inactive')
                     this.$seek_bar_current.classList.add('inactive')
                     this.$seek_bar_pin.classList.add('inactive')
+                    this.$thumbnail_video.classList.add('inactive')
                 })
             })
         })
+        // show thumbnail video depending on where the mouse is 
+        this.$seek_bar_container.addEventListener(
+            'mousemove',
+            (_event)=>{
+                const seek_bar_bounding = this.$seek_bar_container.getBoundingClientRect()
+                const ratio = (_event.clientX - seek_bar_bounding.left) / seek_bar_bounding.width
+                this.$thumbnail_video.currentTime = ratio * this.$thumbnail_video.duration
+                const temp = (this.$seek_bar_container.offsetWidth * ratio)-this.$thumbnail_video.offsetWidth/3
+                console.log(temp);
+                
+
+//  Taille de la main vidéo et on force la mise en position à 2.5% de chaque côté si on dépasse
+
+                const main_video_bounding = this.$video.getBoundingClientRect()
+                // divide by 40 because we need the 2.5% of the width because the seek bar have 2.5% on the left & the right
+                const ttttt = main_video_bounding.width/40 
+                // console.log(thumbnail_video_bounding);
+                
+                // console.log(ttttt);
+                
+
+                this.$thumbnail_video.style.transform = `translateX(${temp}px)`
+
+
+
+
+                
+            }
+        )
 
         // seek bar auto update
-        this.$video.addEventListener(
-            'timeupdate',
-            ()=>{
-                const ratio = this.$video.currentTime / this.$video.duration
-                // seek bar current moving depending on the current time
-                this.$seek_bar_current.style.transform = `scaleX(${ratio})`
-                // seek bar pin moving depending on the current time
-                this.$seek_bar_pin.style.transform = `translateX(${(this.$seek_bar_container.offsetWidth * ratio)-this.$seek_bar_pin.offsetWidth/2}px)`
-            }
-        )
-        // on click, go to the time of a video
-        this.$seek_bar_container.addEventListener(
-            'click',
-            (_event)=>{
-                const bounding = this.$seek_bar_container.getBoundingClientRect()
-                const ratio = (_event.clientX - bounding.left) / bounding.width
-                this.$video.currentTime = ratio * this.$video.duration
-            }
-        )
+        const seek_bar_time_update = (_event)=>{
+            const ratio = this.$video.currentTime / this.$video.duration
+            // seek bar current moving depending on the current time
+            this.$seek_bar_current.style.transform = `scaleX(${ratio})`
+            // seek bar pin moving depending on the current time
+            this.$seek_bar_pin.style.transform = `translateX(${(this.$seek_bar_container.offsetWidth * ratio)-this.$seek_bar_pin.offsetWidth/2}px)`
+        }
+        this.$video.addEventListener('timeupdate', seek_bar_time_update)
+
+
+        // change current time function
+        const seek_bar_change_current_time = (_event)=>{
+            const bounding = this.$seek_bar_container.getBoundingClientRect()
+            const ratio = (_event.clientX - bounding.left) / bounding.width
+            this.$video.currentTime = ratio * this.$video.duration
+        }
+
+        // mouse move to change the seek current bar & pin position
+        const seek_bar_handle_mousemove = (_event)=>{
+            seek_bar_handle_mouseup()
+            window.addEventListener('mousemove', seek_bar_handle_mousemove_function)
+        }
+        const seek_bar_handle_mousemove_function = (_event)=>{
+            seek_bar_time_update()
+            seek_bar_change_current_time(_event)
+        }
+        // mouse down to move seek bar current & pin
+        this.$seek_bar_container.addEventListener('mousedown', seek_bar_handle_mousemove)
+        // mouse up (remove all event listener)
+        const seek_bar_handle_mouseup = (_event)=>{window.addEventListener('mouseup', seek_bar_handle_mouseup_function)}
+        const seek_bar_handle_mouseup_function = (_event)=>{
+            seek_bar_change_current_time(_event)
+            window.removeEventListener('mouseup', seek_bar_handle_mouseup_function)
+            window.removeEventListener('mousemove', seek_bar_handle_mousemove_function)
+        }
+        
 
 
 
+//  Backup
 
+        // const seek_bar_handle_mousedown = (_event)=>{
+        //     const bounding = this.$seek_bar_container.getBoundingClientRect()
+        //     const ratio = (_event.clientX - bounding.left) / bounding.width
+        //     this.$video.currentTime = ratio * this.$video.duration
+        // }
 
-
-
-
-
-
+        // // mouse down move seek bar current & pin
+        // this.$seek_bar_container.addEventListener('mousedown', seek_bar_handle_mousedown)
 
 
 
@@ -253,32 +307,24 @@ class Video_player{
 
 
 
-    }
-    set_show_time(){
-        // const duration_hour = this.$video.duration % 3600
-        // const duration_min = duration_hour % 60
-        // const duration_second = duration_min % 60
-        // console.log(duration_hour);
-        // console.log(duration_min);
-        // console.log(duration_second);
-
+    
+    // set_show_time(){
+    //     // const duration_hour = this.$video.duration % 3600
+    //     // const duration_min = duration_hour % 60
+    //     // const duration_second = duration_min % 60
+    //     // console.log(duration_hour);
+    //     // console.log(duration_min);
+    //     // console.log(duration_second);
+    //     this.$video.addEventListener(
+    //         'timeupdate',
+    //         ()=>{
+    //             console.log(this.$video.duration);
+    //         }
+    //     )
         
-        
-        
+    // }
 
-
-
-
-        this.$video.addEventListener(
-            'timeupdate',
-            ()=>{
-                console.log(this.$video.duration);
-            }
-        )
-        
-    }
-
-}
+}}
 
 
 

@@ -10,10 +10,27 @@ body{
     position: relative;
 }
 
-.video_player video{
+.video_player .main_video{
     object-fit: cover;
     width: 100%;
+}
+
+.video_player .thumbnail_video{
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    object-fit: cover;
+    width: 15%;
     height: auto;
+    border: solid #FFEA00 2px;
+    will-change: transform;
+}
+
+.video_player .thumbnail_video.active{
+    animation: fade 0.15s ease both reverse;
+}
+.video_player .thumbnail_video.inactive{
+    animation: fade 0.15s ease both;
 }
 
 /* 
@@ -60,7 +77,7 @@ body{
     user-select: none;
 }
 .fade-out{
-    animation: fade 0.15s ease forwards;
+    animation: fade 0.15s ease both;
 }
 @keyframes fade{
     0% {
