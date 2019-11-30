@@ -5,15 +5,15 @@ body{
 
 .video_player{
     margin: 0 auto;
-    width: 1280px;
-    height: 720px;
+    width: 80%;
+    height: auto;
     position: relative;
 }
 
 .video_player video{
     object-fit: cover;
-    width: 1280px;
-    height: 720px;
+    width: 100%;
+    height: auto;
 }
 
 /* 
@@ -57,7 +57,7 @@ body{
     position: absolute;
     height: 20px;
     fill: white;
-    user-select: none;  /* compatible */
+    user-select: none;
 }
 .fade-out{
     animation: fade 0.15s ease forwards;
@@ -70,7 +70,7 @@ body{
         opacity: 0;
     }
 }
-/* volume slider */
+/* volume button */
 .volume_button{
     position: absolute;
     left: 90px; /* .play_pause_button left + .play_pause_button width */ 
@@ -121,15 +121,13 @@ body{
     100% {transform: translate(5px, -11px) rotate(45deg) scaleX(1);}
 }
 
-
 .volume_button .volume_icon{
     position: absolute;
     height: 20px;
     fill: white;
-    user-select: none;  /* compatible */
+    user-select: none;
 }
-
-
+/* volume slider */
 .volume_slider_container{
     position: absolute;
     left: 130px; /* .volume_slider width + volume_slider left */
@@ -137,7 +135,7 @@ body{
     height: 50px;
     width: 80px; /* .volume_slider_bar width + .volume_slider_set_volume_min width + .volume_slider_set_volume_max*/
     cursor: pointer;
-    user-select: none;  /* compatible */
+    user-select: none;
 }
 .volume_slider_min{
     position: absolute;
@@ -172,7 +170,7 @@ body{
 .volume_slider_bar_container .volume_slider_bar_pin{
     position: absolute;
     left: 0px; 
-    transform: translateX(0px); /* 0 for min volume to 60 for max volume */
+    transform: translateX(30px); /* 0 for min volume to 60 for max volume */
     top: calc(50% - 5px); /* 50% - height/2 */
     border-radius: 60px;
     height: 10px;
@@ -185,13 +183,103 @@ body{
 .volume_slider_bar_container .volume_slider_bar_level{
     position: absolute;
     top: calc(50% - 1.25px); /* 50% - height/2 */
-    transform: scaleX(60px); /* 0 for min volume to 60 for max volume */
     border-radius: 60px;
     height: 2.5px;
-    width: 1px;
+    width: 30px; /* 0 for min volume to 60 for max volume */
     background: #FFEA00;
     outline: 0;
     cursor: pointer;
     transform-origin: left;
+}
+/* seekbar */
+.seek_bar_container{
+    position: absolute;
+    left: 2.5%;
+    bottom: 50px;
+    width: 95%;
+    height: 15px;
+    cursor: pointer;
+    user-select: none;
+}
+.seek_bar_pin{
+    position: absolute;
+    left: 0px;
+    bottom: -4px;
+    border-radius: 60px;
+    height: 0px;
+    width: 0px;
+    background: #FFEA00;
+    outline: 0;
+    z-index: 1;
+    cursor: pointer;
     will-change: transform;
+}
+.seek_bar_current{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 3px; /* 6px when active */
+    background: #FFEA00;
+    border-radius: 60px;
+    z-index: 1;
+    cursor: pointer;
+    transform: scaleX(0);
+    transform-origin: 0 0;
+}
+.seek_bar{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 3px; /* 6px when active */
+    background: black;
+    opacity: 0.2;
+    border-radius: 60px;
+    cursor: pointer;
+}
+/* seek bar animation */
+.seek_bar.active, .seek_bar_current.active{
+    animation: seek_bar_active 0.1s ease both;
+}
+.seek_bar.inactive, .seek_bar_current.inactive{
+    animation: seek_bar_active 0.1s ease both reverse;
+}
+@keyframes seek_bar_active{
+    0% {height: 3px;}
+    100% {height: 6px;}
+}
+/* pin scale animation */
+.seek_bar_pin.active{
+    animation: scale_in 0.1s ease both;
+}
+.seek_bar_pin.inactive{
+    animation: scale_in 0.1s ease both reverse;
+}
+
+@keyframes scale_in{
+    0% {width: 0px; height: 0px} /* change width and height even there's less performance insteed of scale because I also need to change translateX in Js*/ 
+    100% {width: 15px; height: 15px}
+}
+
+
+
+/* video time */
+.video_show_time{
+    position: absolute;
+    left: 210px; /* .volume_slider_container width + volume_slider_container left */
+    bottom: 0px;
+    padding-left: 10px;
+    height: 50px;
+    width: 130px; /* .volume_slider_bar width + .volume_slider_set_volume_min width + .volume_slider_set_volume_max*/
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.8rem;
+    color: white;
+}
+
+
+/* fullscreen */
+.fullscreen_button{
+
 }
