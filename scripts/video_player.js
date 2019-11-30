@@ -30,9 +30,9 @@ class Video_player{
             }
         )
     }
-    set_volume_min_max(){
-        if (this.$video.volume > 0){
-            this.$video.volume = 0
+    // muted animation
+    check_volume_min_max(){
+        if (this.$video.volume == 0){
             this.$volume_button_muted.classList.remove('inactive')
             window.requestAnimationFrame(()=>{
                 window.requestAnimationFrame(()=>{
@@ -41,8 +41,7 @@ class Video_player{
             })
 
         }
-        else if(this.$video.volume == 0){
-            this.$video.volume = 1
+        else if(this.$video.volume > 0){
             this.$volume_button_muted.classList.remove('active')
             window.requestAnimationFrame(()=>{
                 window.requestAnimationFrame(()=>{
@@ -52,30 +51,50 @@ class Video_player{
         }
     }
     set_volume(){
-        // volume button - set volume min & max
+        // volume button - set volume min & max (muted or not)
         this.$volume_button.addEventListener(
             'click',
             ()=>{
-                this.set_volume_min_max()
+                if(this.$video.volume > 0)
+                    this.$video.volume = 0
+                else if(this.$video.volume == 0)
+                    this.$video.volume = 1
+                this.check_volume_min_max()
             }
         )
-        // set volume min
+        // set volume min (muted)
         this.$volume_slider_min.addEventListener(
             'click',
             () => {
-                this.$video.volume = 1
-                this.set_volume_min_max()
+                this.$video.volume = 0
+                this.check_volume_min_max()
+
             }
         )
-        // set volume max
+        // set volume max (not muted)
         this.$volume_slider_max.addEventListener(
             'click',
             ()=>{
-                this.$video.volume = 0
-                this.set_volume_min_max()
+                this.$video.volume = 1
+                this.check_volume_min_max()
             }
         )
-        this.$volume_slider_bar
+
+        this.$volume_slider_bar_container.addEventListener(
+            'mousedown',
+            ()=>{
+                this.$volume_slider_bar_container.addEventListener(
+                    'mousemove',
+                    (_event)=>{
+                        const bounding = this.$volume_slider_bar.getBoundingClientRect()
+                        const ratio = (_event.clientX - bounding.left) / bounding.width
+                        this.$video.volume = Math.floor((ratio*50))/50 // volume step set to 0.02 (1/50 = 0.02)
+                        console.log(this.$video.volume);
+                        this.check_volume_min_max()
+                    }
+                )
+            }
+        )
     }
 
 }
