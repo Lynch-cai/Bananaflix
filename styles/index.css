@@ -16,42 +16,43 @@ body{
 }
 
 .video_player .thumbnail_video{
+    object-fit: cover;
     position: absolute;
     bottom: 70px;
     left: 0;
-    object-fit: cover;
     width: 15%;
     height: auto;
     border: solid #FFEA00 2px;
     will-change: transform;
+    opacity: 0;
+    pointer-events: none; /* prevent to click to pause the video */ 
 }
 
-.video_player .thumbnail_video.active{
+.video_player .thumbnail_video.active, .thumbnail_video_time.active{
     animation: fade 0.15s ease both reverse;
 }
-.video_player .thumbnail_video.inactive{
+.video_player .thumbnail_video.inactive, .thumbnail_video_time.inactive{
     animation: fade 0.15s ease both;
 }
-
-/* 
-.player .seek-bar{
-    position: relative;
-    width: 600px;
-    height: 30px;
-    background: #ccc;
-}
-
-.player .seek-bar .fill{
+.thumbnail_video_time{
     position: absolute;
-    top: 0;
+    bottom: 72px;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: #666;
-    transform: scaleX(0);
-    transform-origin: 0 0;
+    content: '';
+    width: 4%;
+    height: 2.5%;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    transform: translate(-16px, -1px);
+    z-index: 1;
     will-change: transform;
-} */
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 /* Play pause button */
 .play_pause_button {

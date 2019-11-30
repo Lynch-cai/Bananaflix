@@ -3,12 +3,12 @@ class Video_player{
         this.$video_player = document.querySelector('.js_video_player')
         this.$video = this.$video_player.querySelector('.js_main_video')
         this.$video.volume = 0.5
-        
         this.$seek_bar_container = this.$video_player.querySelector('.js_seek_bar_container')
         this.$seek_bar_pin = this.$seek_bar_container.querySelector('.js_seek_bar_pin')
         this.$seek_bar_current = this.$seek_bar_container.querySelector('.js_seek_bar_current')
         this.$seek_bar = this.$seek_bar_container.querySelector('.js_seek_bar')
         this.$thumbnail_video = this.$video_player.querySelector('.js_thumbnail_video')
+        this.$thumbnail_video_time = this.$video_player.querySelector('.js_thumbnail_video_time')
         this.set_seek_bar()
         this.$play_pause_button = this.$video_player.querySelector('.js_play_pause_button')
         this.$play_pause_button_icon = this.$play_pause_button.querySelectorAll('svg')
@@ -24,7 +24,7 @@ class Video_player{
         this.$volume_slider_bar_pin = this.$volume_slider_bar_container.querySelector('.js_volume_slider_bar_pin')
         this.set_volume()
         this.$video_show_time = this.$video_player.querySelector('.js_video_show_time')
-        // this.set_show_time()
+        this.set_show_time()
     }
     // play pause button
     set_play_pause(){
@@ -151,12 +151,14 @@ class Video_player{
             this.$seek_bar_current.classList.remove('inactive')
             this.$seek_bar_pin.classList.remove('inactive')
             this.$thumbnail_video.classList.remove('inactive')
+            this.$thumbnail_video_time.classList.remove('inactive')
             window.requestAnimationFrame(()=>{
                 window.requestAnimationFrame(()=>{
                     this.$seek_bar.classList.add('active')
                     this.$seek_bar_current.classList.add('active')
                     this.$seek_bar_pin.classList.add('active')
                     this.$thumbnail_video.classList.add('active')
+                    this.$thumbnail_video_time.classList.add('active')
                 })
             })
         })
@@ -168,16 +170,18 @@ class Video_player{
             this.$seek_bar_current.classList.remove('active')
             this.$seek_bar_pin.classList.remove('active')
             this.$thumbnail_video.classList.remove('active')
+            this.$thumbnail_video_time.classList.remove('active')
             window.requestAnimationFrame(()=>{
                 window.requestAnimationFrame(()=>{
                     this.$seek_bar.classList.add('inactive')
                     this.$seek_bar_current.classList.add('inactive')
                     this.$seek_bar_pin.classList.add('inactive')
                     this.$thumbnail_video.classList.add('inactive')
+                    this.$thumbnail_video_time.classList.add('inactive')
                 })
             })
         })
-        // show thumbnail video depending on where the mouse is 
+        // moving thumbnail video & thumbnail video time depending on mouseX posiiton
         this.$seek_bar_container.addEventListener(
             'mousemove',
             (_event)=>{
@@ -185,25 +189,23 @@ class Video_player{
                 const ratio = (_event.clientX - seek_bar_bounding.left) / seek_bar_bounding.width
                 this.$thumbnail_video.currentTime = ratio * this.$thumbnail_video.duration
                 const temp = (this.$seek_bar_container.offsetWidth * ratio)-this.$thumbnail_video.offsetWidth/3
-                console.log(temp);
-                
-
-//  Taille de la main vidéo et on force la mise en position à 2.5% de chaque côté si on dépasse
-
+                // overflow thumbnail video
                 const main_video_bounding = this.$video.getBoundingClientRect()
-                // divide by 40 because we need the 2.5% of the width because the seek bar have 2.5% on the left & the right
-                const ttttt = main_video_bounding.width/40 
-                // console.log(thumbnail_video_bounding);
-                
-                // console.log(ttttt);
-                
-
-                this.$thumbnail_video.style.transform = `translateX(${temp}px)`
-
-
-
-
-                
+                const thumbnail_video_bounding = this.$thumbnail_video.getBoundingClientRect()
+                const thumbnail_video_time_bounding = this.$thumbnail_video_time.getBoundingClientRect()
+                const thumbnail_video_left_space = seek_bar_bounding.left/6
+                if(temp <= thumbnail_video_left_space){
+                    this.$thumbnail_video.style.transform = `translateX(${thumbnail_video_left_space}px)`
+                    this.$thumbnail_video_time.style.transform = `translateX(${thumbnail_video_left_space+thumbnail_video_bounding.width/2-thumbnail_video_time_bounding.width/2}px)`
+                }
+                else if(temp > main_video_bounding.width-thumbnail_video_left_space*7.05){
+                    this.$thumbnail_video.style.transform = `translateX(${main_video_bounding.width-thumbnail_video_left_space*7.05}px)`
+                    this.$thumbnail_video_time.style.transform = `translateX(${main_video_bounding.width-thumbnail_video_left_space*7.05+thumbnail_video_bounding.width/2-thumbnail_video_time_bounding.width/2}px)`
+                }
+                else{
+                    this.$thumbnail_video.style.transform = `translateX(${temp}px)`
+                    this.$thumbnail_video_time.style.transform = `translateX(${temp+thumbnail_video_bounding.width/2-thumbnail_video_time_bounding.width/2}px)`
+                }
             }
         )
 
@@ -243,88 +245,55 @@ class Video_player{
             window.removeEventListener('mouseup', seek_bar_handle_mouseup_function)
             window.removeEventListener('mousemove', seek_bar_handle_mousemove_function)
         }
-        
+    }
 
+    set_show_time(){
+        this.$video.addEventListener(
+            'timeupdate',
+            ()=>{
+                // duration variables
+                let video_duration_hours = Math.floor(this.$video.duration/3600)
+                let video_duration_mins = Math.floor((this.$video.duration%3600)/60)
+                let video_duration_seconds = Math.floor((this.$video.duration%60))
+                if(video_duration_seconds < 10)
+                    video_duration_seconds = `0${video_duration_seconds}`
+                if(video_duration_mins < 10)
+                    video_duration_mins = `0${video_duration_mins}`
+                if(video_duration_hours < 10)
+                    video_duration_hours = `0${video_duration_hours}`
+                // current time variables
+                const video_current_time = Math.floor(this.$video.currentTime)
+                let video_current_hours = Math.floor(video_current_time/3600)
+                let video_current_mins = Math.floor((video_current_time%3600)/60)
+                let video_current_seconds = video_current_time%60
+                if(video_current_seconds < 10)
+                    video_current_seconds = `0${video_current_seconds}`
+                if(video_current_mins < 10)
+                    video_current_mins = `0${video_current_mins}`
+                if(video_current_hours < 10)
+                    video_current_hours = `0${video_current_hours}`
+                // show the current time & the duration
+                this.$video_show_time.innerText = `${video_current_hours}:${video_current_mins}:${video_current_seconds}/${video_duration_hours}:${video_duration_mins}:${video_duration_seconds}`
+            }
+        )
+        // refresh thumbnail video time when mouving with mouse on the seek bar container
+        const refresh_thumbnail_video_time = ()=>{
+            const thumbnail_video_current_time = Math.floor(this.$thumbnail_video.currentTime)
+            let thumbnail_video_current_hours = Math.floor(thumbnail_video_current_time/3600)
+            let thumbnail_video_current_mins = Math.floor((thumbnail_video_current_time%3600)/60)
+            let thumbnail_video_current_seconds = thumbnail_video_current_time%60
+            if(thumbnail_video_current_seconds < 10)
+                thumbnail_video_current_seconds = `0${thumbnail_video_current_seconds}`
+            if(thumbnail_video_current_mins < 10)
+                thumbnail_video_current_mins = `0${thumbnail_video_current_mins}`
+            if(thumbnail_video_current_hours < 10)
+                thumbnail_video_current_hours = `0${thumbnail_video_current_hours}`
+            this.$thumbnail_video_time.innerText = `${thumbnail_video_current_hours}:${thumbnail_video_current_mins}:${thumbnail_video_current_seconds}`
+        }
+        this.$seek_bar_container.addEventListener('mousemove', refresh_thumbnail_video_time)
+    }
 
-
-//  Backup
-
-        // const seek_bar_handle_mousedown = (_event)=>{
-        //     const bounding = this.$seek_bar_container.getBoundingClientRect()
-        //     const ratio = (_event.clientX - bounding.left) / bounding.width
-        //     this.$video.currentTime = ratio * this.$video.duration
-        // }
-
-        // // mouse down move seek bar current & pin
-        // this.$seek_bar_container.addEventListener('mousedown', seek_bar_handle_mousedown)
-
-
-
-
-
-    //     const volume_handle_mousemove = ()=>{
-    //         volume_handle_mouseup()
-    //         this.$volume_slider_bar_container.addEventListener('mousemove', volume_handle_mousemove_function)
-    //     }
-    //     const volume_handle_mousemove_function = (_event)=>{
-    //         const bounding = this.$volume_slider_bar.getBoundingClientRect()
-    //         const ratio = (_event.clientX - bounding.left -5) / (bounding.width-10) // pin width = 5px 
-    //         let temp = Math.floor(((ratio)*50))/50
-    //             // include volume in 0 to 1
-    //         if (temp > 1)
-    //             temp = 1
-    //         else if (temp < 0){
-    //             temp = 0
-    //         }
-    //         this.$video.volume = temp
-    //         this.$volume_slider_bar_pin.style.transform = `translate(${temp*100/(100/60)}px)`
-    //         this.$volume_slider_bar_level.style.width = `${temp*100/(100/60)}px`
-    //     }
-    //         // mouse up
-    //     const volume_handle_mouseup = (_event)=>{window.addEventListener('mouseup', volume_handle_mouseup_function)} // muted animation when mouse up if volume = 0
-    //     const volume_handle_mouseup_function = (_event)=>{
-    //         volume_handle_mousemove_function(_event)
-    //         // remove mousemove eventlistener
-    //         this.$volume_slider_bar_container.removeEventListener('mousemove', volume_handle_mousemove_function)
-    //         // remove mouseup event listener
-    //         window.removeEventListener('mouseup', volume_handle_mouseup_function)
-    //         this.check_volume_min_max()
-    //     }
-
-    //         // mouse down
-    //     this.$volume_slider_bar_container.addEventListener('mousedown', volume_handle_mousemove)
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    // set_show_time(){
-    //     // const duration_hour = this.$video.duration % 3600
-    //     // const duration_min = duration_hour % 60
-    //     // const duration_second = duration_min % 60
-    //     // console.log(duration_hour);
-    //     // console.log(duration_min);
-    //     // console.log(duration_second);
-    //     this.$video.addEventListener(
-    //         'timeupdate',
-    //         ()=>{
-    //             console.log(this.$video.duration);
-    //         }
-    //     )
-        
-    // }
-
-}}
+}
 
 
 
