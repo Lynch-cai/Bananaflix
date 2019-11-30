@@ -3,6 +3,9 @@ class Video_player{
         this.$video_player = document.querySelector('.js_video_player')
         this.$video = this.$video_player.querySelector('.js_main_video')
         this.$video.volume = 0.5
+        
+        this.$control_container = this.$video_player.querySelector('.js_control_container')
+        this.set_auto_hide()
         this.$seek_bar_container = this.$video_player.querySelector('.js_seek_bar_container')
         this.$seek_bar_pin = this.$seek_bar_container.querySelector('.js_seek_bar_pin')
         this.$seek_bar_current = this.$seek_bar_container.querySelector('.js_seek_bar_current')
@@ -25,6 +28,37 @@ class Video_player{
         this.set_volume()
         this.$video_show_time = this.$video_player.querySelector('.js_video_show_time')
         this.set_show_time()
+    }
+    // auto hide control menu after 1 second
+    set_auto_hide(){
+        let idle_time = 0
+        const timer_increment = ()=>{
+            idle_time += 1
+            if (idle_time>=10){
+                this.$control_container.classList.remove('active')
+                window.requestAnimationFrame(()=>{
+                    window.requestAnimationFrame(()=>{
+                        this.$control_container.classList.add('inactive')
+                    })
+                })
+            }
+            else{
+                this.$control_container.classList.add('active')
+                window.requestAnimationFrame(()=>{
+                    window.requestAnimationFrame(()=>{
+                        this.$control_container.classList.remove('inactive')
+                    })
+                })
+            }
+        }
+        const idle_interval = setInterval(timer_increment, 100); // 100ms
+        this.$video_player.addEventListener(
+            'mousemove',
+            ()=>{
+                idle_time = 0
+            }
+        )
+
     }
     // play pause button
     set_play_pause(){

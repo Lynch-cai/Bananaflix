@@ -28,10 +28,10 @@ body{
     pointer-events: none; /* prevent to click to pause the video */ 
 }
 
-.video_player .thumbnail_video.active, .thumbnail_video_time.active{
+.video_player .thumbnail_video.active, .thumbnail_video_time.active, .control_container.active{
     animation: fade 0.15s ease both reverse;
 }
-.video_player .thumbnail_video.inactive, .thumbnail_video_time.inactive{
+.video_player .thumbnail_video.inactive, .thumbnail_video_time.inactive, .control_container.inactive{
     animation: fade 0.15s ease both;
 }
 .thumbnail_video_time{
@@ -39,20 +39,36 @@ body{
     bottom: 72px;
     left: 0;
     content: '';
-    width: 4%;
-    height: 2.5%;
+    width: 6%;
+    height: 4%;
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.5);
     transform: translate(-16px, -1px);
     z-index: 1;
     will-change: transform;
-    border: 1px solid rgba(0, 0, 0, 0.7);
+    border: 0.5px solid rgba(0, 0, 0, 0.6);
+    border-radius: 10px 10px 0 0;
     color: white;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
+    font-family: 'Roboto', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: none; /* prevent to click*/ 
 }
+
+
+
+.control_shadow{
+    position: absolute;
+    bottom: 4px;
+    opacity: 0.9;
+    background: linear-gradient( rgba(0, 0, 0, 0), black);
+    width: 100%;
+    height: 70px;
+    pointer-events: none;
+}
+
 
 /* Play pause button */
 .play_pause_button {
