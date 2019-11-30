@@ -30,35 +30,54 @@ class Video_player{
             }
         )
     }
+    set_volume_min_max(){
+        if (this.$video.volume > 0){
+            this.$video.volume = 0
+            this.$volume_button_muted.classList.remove('inactive')
+            window.requestAnimationFrame(()=>{
+                window.requestAnimationFrame(()=>{
+                    this.$volume_button_muted.classList.add('active')
+                })
+            })
+
+        }
+        else if(this.$video.volume == 0){
+            this.$video.volume = 1
+            this.$volume_button_muted.classList.remove('active')
+            window.requestAnimationFrame(()=>{
+                window.requestAnimationFrame(()=>{
+                    this.$volume_button_muted.classList.add('inactive')
+                })
+            })
+        }
+    }
     set_volume(){
-        // volume button - set volume min 
+        // volume button - set volume min & max
         this.$volume_button.addEventListener(
             'click',
             ()=>{
-                this.$volume_button_muted.classList.toggle('active')
-                if (this.$video.volume > 0){
-                    this.$video.volume = 0
-                }
-                else if(this.$video.volume == 0){
-                    this.$video.volume = 0.5
-                }
+                this.set_volume_min_max()
             }
         )
         // set volume min
         this.$volume_slider_min.addEventListener(
             'click',
-            ()=>{
-                this.$video.volume = 0
+            () => {
+                this.$video.volume = 1
+                this.set_volume_min_max()
             }
         )
         // set volume max
         this.$volume_slider_max.addEventListener(
             'click',
-            () => {
-                this.$video.volume = 1
+            ()=>{
+                this.$video.volume = 0
+                this.set_volume_min_max()
             }
         )
+        this.$volume_slider_bar
     }
+
 }
 
 

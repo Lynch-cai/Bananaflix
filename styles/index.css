@@ -57,6 +57,7 @@ body{
     position: absolute;
     height: 20px;
     fill: white;
+    user-select: none;  /* compatible */
 }
 .fade-out{
     animation: fade 0.15s ease forwards;
@@ -85,24 +86,39 @@ body{
     border: 0;
     outline: 0;
 }
-
+    /* mute bar */
 .volume_button_muted{
-    width: 30px;
+    width: 32px;
     height: 2px;
     background: white;
-    transform: rotate(45deg);
-    box-shadow: 0.5px -0.5px black;
+    transform: translate(5px, -11px) rotate(45deg) scaleX(0);
     z-index: 1;
-    opacity: 0;
+    transform-origin: top left;
+}
+    /* muted bar shadow */
+.volume_button_muted::after{
+    position: absolute;
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: black;
+    transform: translate(-14px, -1px);
+    z-index: -1;
+    opacity: 0.6;
 }
 
 .volume_button_muted.active{
-    animation: volume_muted 0.5s cubic-bezier(0.8, 0, 0.2, 1) both;
+    animation: volume_muted 0.3s cubic-bezier(0.8, 0, 0.2, 1) both;
+}
+.volume_button_muted.inactive{
+    animation: volume_muted 0.3s cubic-bezier(0.8, 0, 0.2, 1) both reverse;
 }
 
 @keyframes volume_muted{
-    0% {transform: translate(5px, -11px) rotate(45deg) scaleX(0); opacity: 1; transform-origin: top left;}
-    100% {transform: translate(5px, -11px) rotate(45deg) scaleX(1); opacity: 1; transform-origin: top left;}
+    0% {transform: translate(5px, -11px) rotate(45deg) scaleX(0); 
+        opacity: 1;}
+    100% {transform: translate(5px, -11px) rotate(45deg) scaleX(1); 
+        opacity: 1;}
 }
 
 
@@ -110,6 +126,7 @@ body{
     position: absolute;
     height: 20px;
     fill: white;
+    user-select: none;  /* compatible */
 }
 
 
@@ -120,6 +137,7 @@ body{
     height: 50px;
     width: 80px; /* .volume_slider_bar width + .volume_slider_set_volume_min width + .volume_slider_set_volume_max*/
     cursor: pointer;
+    user-select: none;  /* compatible */
 }
 .volume_slider_min{
     position: absolute;
@@ -153,7 +171,7 @@ body{
 }
 .volume_slider_bar_container .volume_slider_bar_level{
     position: absolute;
-    left: 30px; /* 0 for min volume to 60 for max volume */
+    left: 60px; /* 0 for min volume to 60 for max volume */
     top: calc(50% - 5px); /* 50% - height/2 */
     border-radius: 60px;
     height: 10px;
