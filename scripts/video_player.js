@@ -46,6 +46,7 @@ class Video_player{
         this.$subtitle_button = this.$video_player.querySelector('.js_subtitle_button')
         this.$js_video_subtitle = this.$video_player.querySelector('.js_video_subtitle')
         this.set_subtitle()
+        this.set_keyboard_time_controls()
     }
     // get & save current time on the video
     set_continue_watching(){
@@ -527,14 +528,14 @@ class Video_player{
             }}
         )
     }
-    set_keyboard_controls(){
+    set_keyboard_time_controls(){
         document.addEventListener(
             'keypress',
             (_event)=>{
-                // prevent from double play/pause pressing because of focused element 
-                let isFocused = (document.activeElement === this.$play_pause_button)
-                if(_event.code == 'Space' && !isFocused)
-                    play_pause()
+                if(_event.code == 'KeyD' || _event.code == 'ArrowRight')
+                    this.$video.currentTime += 5
+                else if(_event.code == 'KeyQ' || _event.code == 'KeyA')
+                    this.$video.currentTime -= 5
             }
         )
     }
