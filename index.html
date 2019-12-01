@@ -10,16 +10,12 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav>
-        Your menu here
-    </nav>
-
+        <div class="luminosity_light_filter js_luminosity_light_filter"></div>
     <div class="video_player js_video_player">
         <video src="medias/videos/movie01.mp4" poster='medias/images/movie01_poster.jpg' class="main_video js_main_video"></video>
         <video src="medias/videos/movie01.mp4" muted class="thumbnail_video js_thumbnail_video">
         </video>
         <span class="thumbnail_video_time js_thumbnail_video_time">00:00:00</span>
-        <div class="luminosity_light_filter js_luminosity_light_filter"></div>
         <div class="luminosity_blue_light_filter js_luminosity_blue_light_filter"></div>
         <div class="control_container js_control_container">
             <div class="control_shadow"></div>
@@ -67,7 +63,7 @@
                 <!-- luminosity icon -->
                 <svg viewBox="0 0 352.705 352.705" class="video_player_icons"><path d="M176.353,83.166c-51.383,0-93.187,41.804-93.187,93.186s41.803,93.187,93.187,93.187c51.383,0,93.186-41.804,93.186-93.187S227.735,83.166,176.353,83.166z"/><path d="M176.353,63.128c8.284,0,15-6.716,15-15V15c0-8.284-6.716-15-15-15c-8.284,0-15,6.716-15,15v33.128C161.353,56.412,168.068,63.128,176.353,63.128z"/><path d="M176.353,289.577c-8.284,0-15,6.716-15,15v33.128c0,8.284,6.716,15,15,15c8.284,0,15-6.716,15-15v-33.128C191.353,296.293,184.637,289.577,176.353,289.577z"/><path d="M75.077,96.291c2.929,2.93,6.768,4.394,10.607,4.394c3.838,0,7.678-1.465,10.606-4.394c5.858-5.857,5.858-15.354,0-21.213L75.537,54.323c-5.857-5.859-15.355-5.857-21.213,0c-5.858,5.857-5.858,15.354,0,21.213L75.077,96.291z"/><path d="M277.627,256.414c-5.857-5.857-15.355-5.857-21.213,0c-5.857,5.857-5.857,15.355,0,21.213l20.754,20.754c2.929,2.929,6.768,4.394,10.607,4.394c3.839,0,7.678-1.465,10.607-4.394c5.857-5.857,5.857-15.355-0.001-21.213L277.627,256.414z"/><path d="M63.128,176.352c0-8.284-6.716-15-15-15H15c-8.284,0-15,6.716-15,15c0,8.284,6.716,15,15,15h33.127C56.412,191.352,63.128,184.637,63.128,176.352z"/><path d="M337.705,161.352h-33.128c-8.284,0-15,6.716-15,15c0,8.284,6.716,15,15,15h33.128c8.284,0,15-6.716,15-15C352.705,168.068,345.989,161.352,337.705,161.352z"/><path d="M267.021,100.685c3.839,0,7.678-1.465,10.607-4.394l20.754-20.755c5.857-5.857,5.857-15.356-0.001-21.213c-5.857-5.857-15.355-5.857-21.213,0l-20.754,20.755c-5.857,5.857-5.857,15.355,0,21.213C259.343,99.22,263.182,100.685,267.021,100.685z"/><path d="M75.078,256.414l-20.754,20.754c-5.858,5.857-5.858,15.355,0,21.213c2.929,2.929,6.768,4.394,10.606,4.394c3.839,0,7.678-1.465,10.606-4.394l20.754-20.754c5.858-5.857,5.858-15.355,0-21.213C90.433,250.557,80.935,250.557,75.078,256.414z"/></svg>                            
             </div>
-            <div class="luminosity_menu_container js_luminosity_menu_container">
+            <div class="luminosity_menu_container js_luminosity_menu_container prevent_click">
                 <div class="luminosity_menu_light">
                     <span>Light</span>
                     <div class="luminosity_light_bar_container js_luminosity_light_bar_container">

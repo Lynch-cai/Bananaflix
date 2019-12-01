@@ -30,8 +30,8 @@ class Video_player{
         this.set_show_time()
         this.$fullscreen_button = this.$video_player.querySelector('.js_fullscreen_button')
         this.set_fullscreen()
-        this.$luminosity_light_filter = this.$video_player.querySelector('.js_luminosity_light_filter')
-        this.$luminosity_blue_light_filter = this.$video_player.querySelector('.js_luminosity_blue_light_filter')
+        this.$luminosity_light_filter = document.querySelector('.js_luminosity_light_filter')
+        this.$luminosity_blue_light_filter = document.querySelector('.js_luminosity_blue_light_filter')
         this.$luminosity_button = this.$video_player.querySelector('.js_luminosity_button')
         this.$luminosity_menu_container = this.$video_player.querySelector('.js_luminosity_menu_container')
         this.$luminosity_light_bar_container = this.$luminosity_menu_container.querySelector('.js_luminosity_light_bar_container')
@@ -49,19 +49,18 @@ class Video_player{
         // get video current time in local storage
         const video_current_time = window.localStorage.getItem('video_current_time');
         this.$video.currentTime = video_current_time
-        
         // save video current time in local storage
         const autosave = ()=>{
             window.localStorage.setItem('video_current_time', this.$video.currentTime);
         }
         setInterval(autosave, 1000) // save every 1s
     }
-    // auto hide control menu after 1 second
+    // auto hide control menu after 2 second
     set_auto_hide(){
         let idle_time = 0
         const timer_increment = ()=>{
             idle_time += 1
-            if (idle_time>=10){
+            if (idle_time>=20){ // 2 second (20 * 100ms)
                 this.$control_container.classList.remove('active')
                 window.requestAnimationFrame(()=>{
                     window.requestAnimationFrame(()=>{
@@ -79,8 +78,14 @@ class Video_player{
             }
         }
         const idle_interval = setInterval(timer_increment, 100); // 100ms
-        this.$video_player.addEventListener(
+        this.$video_player.addEventListener( // reset idle time on mouse move
             'mousemove',
+            ()=>{
+                idle_time = 0
+            }
+        )
+        this.$video_player.addEventListener( // reset idle time on click
+            'click',
             ()=>{
                 idle_time = 0
             }
@@ -421,9 +426,9 @@ class Video_player{
             }
             this.$luminosity_light_filter.style.opacity = temp
             this.$luminosity_light_bar_pin.style.transform = `translate(${temp*100/(100/60)}px)`
-            this.$luminosity_light_bar_level.style.width = `${temp*100/(100/60)}px`
+            this.$luminosity_light_bar_level.style.transform = `scaleX(${temp})`
         }
-            // mouse up
+        // mouse up
         const luminosity_handle_mouseup = (_event)=>{window.addEventListener('mouseup', luminosity_handle_mouseup_function)} // muted animation when mouse up if luminosity = 0
         const luminosity_handle_mouseup_function = (_event)=>{
             luminosity_handle_mousemove_function(_event)
@@ -432,27 +437,76 @@ class Video_player{
             // remove mouseup event listener
             window.removeEventListener('mouseup', luminosity_handle_mouseup_function)
         }
-            // mouse down
-        this.$luminosity_light_bar_container.addEventListener('mousedown', luminosity_handle_mousemove)
 
+    // luminosity toggle switch (blue light) class Animation
+        let is_active_blue_light_filter = false
+        const blue_light_filter_switch = ()=>{
+            if (!is_active_blue_light_filter){
+                is_active_blue_light_filter = true
+                this.$luminosity_blue_light_filter_switch_pin.classList.remove('inactive')
+                this.$luminosity_blue_light_filter_switch.classList.remove('inactive')
+                this.$luminosity_blue_light_filter.classList.remove('inactive')
+                window.requestAnimationFrame(()=>{
+                    window.requestAnimationFrame(()=>{
+                        this.$luminosity_blue_light_filter_switch_pin.classList.add('active')
+                        this.$luminosity_blue_light_filter_switch.classList.add('active')
+                        this.$luminosity_blue_light_filter.classList.add('active')
+                    })
+                })
+            }
+            else{
+                is_active_blue_light_filter = false
+                this.$luminosity_blue_light_filter_switch_pin.classList.remove('active')
+                this.$luminosity_blue_light_filter_switch.classList.remove('active')
+                this.$luminosity_blue_light_filter.classList.remove('active')
+                window.requestAnimationFrame(()=>{
+                    window.requestAnimationFrame(()=>{
+                        this.$luminosity_blue_light_filter_switch_pin.classList.add('inactive')
+                        this.$luminosity_blue_light_filter_switch.classList.add('inactive')
+                        this.$luminosity_blue_light_filter.classList.add('inactive')
+                    })
+                })
+            }
+        }
 
-
-    // luminosity toggle switch (blue light)
-        // let is_active_blue_light_filter = false
-        // this.$luminosity_blue_light_filter_switch_container.addEventListener(
-        //     'click',
-        //     ()=>{
-        //         if (!is_active_blue_light_filter){
-        //             this.$luminosity_blue_light_filter_switch_pin
-        //         }
-        //     }
-        // )
-
-
-
-
+    // Show menu on click & prevent from clicking on the light slider and the blue light switch when the menu is closed
+        let is_active_luminosity_menu = false
+        this.$luminosity_button.addEventListener(
+            'click',
+            ()=>{
+                if (is_active_luminosity_menu){ // if menu is opened
+                    is_active_luminosity_menu = false
+                    // remove event listener on the slider and the buttons
+                    this.$luminosity_light_bar_container.removeEventListener('mousedown', luminosity_handle_mousemove)
+                    this.$luminosity_blue_light_filter_switch_container.removeEventListener('click', blue_light_filter_switch)
+                    // prevent to click on the slider & button when the menu is closed
+                    this.$luminosity_menu_container.classList.toggle('prevent_click')
+                    // hide menu
+                    this.$luminosity_menu_container.classList.remove('active')
+                    window.requestAnimationFrame(()=>{
+                        window.requestAnimationFrame(()=>{
+                            this.$luminosity_menu_container.classList.add('inactive')
+                        })
+                    })
+                }
+                else{ // if menu is closed
+                    is_active_luminosity_menu = true
+                    // add event listener on the slider and the buttons
+                    // mouse down (drag on the light slider)
+                    this.$luminosity_light_bar_container.addEventListener('mousedown', luminosity_handle_mousemove)
+                    // click on the blue light switch
+                    this.$luminosity_blue_light_filter_switch_container.addEventListener('click', blue_light_filter_switch)
+                    this.$luminosity_menu_container.classList.toggle('prevent_click')
+                    // show menu
+                    this.$luminosity_menu_container.classList.remove('inactive')
+                    window.requestAnimationFrame(()=>{
+                        window.requestAnimationFrame(()=>{
+                            this.$luminosity_menu_container.classList.add('active')
+                        })
+                    })
+                }
+            }
+        )
     }
-
-
 }
 const video_player = new Video_player()
