@@ -1,6 +1,7 @@
 body{
     padding: 0;
     margin: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 .video_player{
@@ -13,6 +14,12 @@ body{
 .video_player .main_video{
     object-fit: cover;
     width: 100%;
+    z-index: -5;
+
+}
+/* hide native control in fullscreen mode */ 
+.video_player .main_video::-webkit-media-controls{
+    display:none !important;
 }
 
 .video_player .thumbnail_video{
@@ -26,7 +33,14 @@ body{
     will-change: transform;
     opacity: 0;
     pointer-events: none; /* prevent to click to pause the video */ 
+    will-change: opacity, transform;
 }
+
+.control_container{
+    will-change: opacity;
+}
+
+/* fade animation for thumbnail video/time and for control container*/
 
 .video_player .thumbnail_video.active, .thumbnail_video_time.active, .control_container.active{
     animation: fade 0.15s ease both reverse;
@@ -34,6 +48,8 @@ body{
 .video_player .thumbnail_video.inactive, .thumbnail_video_time.inactive, .control_container.inactive{
     animation: fade 0.15s ease both;
 }
+
+/* text time bellow thumbnail video */
 .thumbnail_video_time{
     position: absolute;
     bottom: 72px;
@@ -50,15 +66,13 @@ body{
     border-radius: 10px 10px 0 0;
     color: white;
     font-size: 0.8rem;
-    font-family: 'Roboto', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     pointer-events: none; /* prevent to click*/ 
 }
 
-
-
+/* linear gradient bellow controllers */
 .control_shadow{
     position: absolute;
     bottom: 4px;
@@ -69,6 +83,14 @@ body{
     pointer-events: none;
 }
 
+/* all icons */
+.video_player_icons{
+    position: absolute;
+    height: 20px;
+    fill: white;
+    user-select: none;
+    will-change: opacity;
+}
 
 /* Play pause button */
 .play_pause_button {
@@ -87,12 +109,7 @@ body{
     align-items: center;
     padding: 0;
   }
-.play_pause_button .play_pause_icon{
-    position: absolute;
-    height: 20px;
-    fill: white;
-    user-select: none;
-}
+
 .fade-out{
     animation: fade 0.15s ease both;
 }
@@ -128,7 +145,7 @@ body{
     transform: translate(5px, -11px) rotate(45deg) scaleX(0);
     z-index: 1;
     transform-origin: top left;
-    will-change: transform;
+    will-change: opacity, transform;
 }
     /* muted bar shadow */
 .volume_button_muted::after{
@@ -140,7 +157,7 @@ body{
     transform: translate(-16px, -1px);
     z-index: -1;
     opacity: 0.6;
-    will-change: transform;
+    will-change: opacity, transform;
 }
 
 .volume_button_muted.active{
@@ -155,12 +172,6 @@ body{
     100% {transform: translate(5px, -11px) rotate(45deg) scaleX(1);}
 }
 
-.volume_button .volume_icon{
-    position: absolute;
-    height: 20px;
-    fill: white;
-    user-select: none;
-}
 /* volume slider */
 .volume_slider_container{
     position: absolute;
@@ -246,7 +257,7 @@ body{
     outline: 0;
     z-index: 1;
     cursor: pointer;
-    will-change: transform;
+    will-change: opacity, transform;
 }
 .seek_bar_current{
     position: absolute;
@@ -259,6 +270,7 @@ body{
     cursor: pointer;
     transform: scaleX(0);
     transform-origin: 0 0;
+    will-change: opacity, transform;
 }
 .seek_bar{
     position: absolute;
@@ -306,14 +318,186 @@ body{
     width: 130px; /* .volume_slider_bar width + .volume_slider_set_volume_min width + .volume_slider_set_volume_max*/
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    font-family: 'Roboto', sans-serif;
+    justify-content: center;
     font-size: 0.8rem;
     color: white;
 }
 
 
 /* fullscreen */
-.fullscreen_button{
+.fullscreen_button {
+    position: absolute;
+    right: 30px;
+    bottom: 0;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    outline: 0;
+    user-select: none;
+    width: 60px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
 
+
+/* luminosity */
+
+    /* filters */
+.luminosity_light_filter{
+    width: 100%;
+    height: calc(100% - 5px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    pointer-events: none; /* prevent to click*/ 
+    user-select: none;
+    will-change: opacity;
+}
+.luminosity_blue_light_filter{
+    width: 100%;
+    height: calc(100% - 5px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 0, 0.075);
+    pointer-events: none; /* prevent to click*/ 
+    user-select: none;
+    will-change: opacity;
+}
+
+    /* button to open menu */
+.luminosity_button{
+    position: absolute;
+    right: 90px;
+    bottom: 0;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    outline: 0;
+    user-select: none;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+
+    /* menu and content */
+.luminosity_menu_container{
+    position: absolute;
+    right: 35px;
+    bottom: 80px;
+    width: 160px;
+    height: 70px;
+    background: rgba(0, 0, 0, 0.5);
+    user-select: none;
+    border-radius: 35px;
+    color: white;
+    font-size: 0.7rem;
+    display: inline-block;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    /* light menu and content*/
+.luminosity_menu_container .luminosity_menu_light{
+    padding: 16px 15px 5px 15px;
+    display: flex;
+    
+}
+
+.luminosity_menu_container .luminosity_menu_light .luminosity_light_bar_container{
+    position: absolute;
+    top: 14.75px;
+    left: 75px;
+    height: 20px;
+    width: 70px;
+    outline: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.luminosity_menu_container .luminosity_menu_light .luminosity_light_bar{
+    position: absolute;
+    border-radius: 60px;
+    height: 2.5px;
+    width: 70px;
+    background: #fff;
+    outline: 0;
+    cursor: pointer;
+
+}
+
+.luminosity_menu_container .luminosity_menu_light .luminosity_light_bar_level{
+    position: absolute;
+    border-radius: 60px;
+    height: 2.5px;
+    width: 70px; /* 0 for min volume to 60 for max volume */
+    background: #FFEA00;
+    outline: 0;
+    cursor: pointer;
+    transform-origin: left;
+    z-index: 1;
+    transform: scaleX(0);
+    will-change: transform;
+}
+
+.luminosity_menu_container .luminosity_menu_light .luminosity_light_bar_pin{
+    position: absolute;
+    transform: translateX(0px); /* 0 for min volume to 60 for max volume */
+    border-radius: 60px;
+    height: 10px;
+    width: 10px;
+    background: #FFEA00;
+    outline: 0;
+    cursor: pointer;
+    will-change: transform;
+}
+
+    /* blue light menu and content*/
+.luminosity_menu_blue_light_filter{
+    padding: 5px 15px 16px 15px;
+}
+
+.luminosity_blue_light_filter_switch_container{
+    position: absolute;
+    bottom: 14.75px;
+    left: 110px;
+    height: 20px;
+    width: 35px;
+    outline: 0;
+    background: red;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.luminosity_blue_light_filter_switch{
+    height: 10px;
+    width: 26px;
+    outline: 0;
+    background: #FFEA00;
+    border-radius: 900px;
+    cursor: pointer;
+    align-items: center;
+}
+.luminosity_blue_light_filter_switch_pin{
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    outline: 0;
+    background: white;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    border-radius: 900px;
+    cursor: pointer;
+    align-items: center;
+    transform: translateX(-12px);
 }

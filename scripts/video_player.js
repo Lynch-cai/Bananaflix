@@ -3,7 +3,7 @@ class Video_player{
         this.$video_player = document.querySelector('.js_video_player')
         this.$video = this.$video_player.querySelector('.js_main_video')
         this.$video.volume = 0.5
-        
+        this.set_continue_watching()
         this.$control_container = this.$video_player.querySelector('.js_control_container')
         this.set_auto_hide()
         this.$seek_bar_container = this.$video_player.querySelector('.js_seek_bar_container')
@@ -28,6 +28,33 @@ class Video_player{
         this.set_volume()
         this.$video_show_time = this.$video_player.querySelector('.js_video_show_time')
         this.set_show_time()
+        this.$fullscreen_button = this.$video_player.querySelector('.js_fullscreen_button')
+        this.set_fullscreen()
+        this.$luminosity_light_filter = this.$video_player.querySelector('.js_luminosity_light_filter')
+        this.$luminosity_blue_light_filter = this.$video_player.querySelector('.js_luminosity_blue_light_filter')
+        this.$luminosity_button = this.$video_player.querySelector('.js_luminosity_button')
+        this.$luminosity_menu_container = this.$video_player.querySelector('.js_luminosity_menu_container')
+        this.$luminosity_light_bar_container = this.$luminosity_menu_container.querySelector('.js_luminosity_light_bar_container')
+        this.$luminosity_light_bar_level = this.$luminosity_light_bar_container.querySelector('.js_luminosity_light_bar_level')
+        this.$luminosity_light_bar = this.$luminosity_light_bar_container.querySelector('.js_luminosity_light_bar')
+        this.$luminosity_light_bar_pin = this.$luminosity_light_bar_container.querySelector('.js_luminosity_light_bar_pin')
+        this.$luminosity_menu_blue_light_filter = this.$luminosity_menu_container.querySelector('.js_luminosity_menu_blue_light_filter')
+        this.$luminosity_blue_light_filter_switch_container = this.$luminosity_menu_blue_light_filter.querySelector('.js_luminosity_blue_light_filter_switch_container')
+        this.$luminosity_blue_light_filter_switch = this.$luminosity_blue_light_filter_switch_container.querySelector('.js_luminosity_blue_light_filter_switch')
+        this.$luminosity_blue_light_filter_switch_pin = this.$luminosity_blue_light_filter_switch_container.querySelector('.js_luminosity_blue_light_filter_switch_pin')
+        this.set_luminosity()
+    }
+    // get & save current time on the video
+    set_continue_watching(){
+        // get video current time in local storage
+        const video_current_time = window.localStorage.getItem('video_current_time');
+        this.$video.currentTime = video_current_time
+        
+        // save video current time in local storage
+        const autosave = ()=>{
+            window.localStorage.setItem('video_current_time', this.$video.currentTime);
+        }
+        setInterval(autosave, 1000) // save every 1s
     }
     // auto hide control menu after 1 second
     set_auto_hide(){
@@ -113,23 +140,31 @@ class Video_player{
     // set volume with the slider
     set_volume(){
         // volume button - set volume min & max (muted or not)
+        let actual_video_volume
         this.$volume_button.addEventListener(
             'click',
             ()=>{
-                if(this.$video.volume > 0)
+                if(this.$video.volume > 0){
+                    // save actual volume before muted
+                    actual_video_volume = this.$video.volume
                     this.$video.volume = 0
-                else if(this.$video.volume == 0)
-                    this.$video.volume = 0.5
-                this.check_volume_min_max()
+                    this.check_volume_min_max()
+                }
+                else if(this.$video.volume == 0){
+                    // use 'actual volume' after unmuted
+                    this.$video.volume = actual_video_volume
+                    this.check_volume_min_max()
+                }
             }
         )
         // set volume min (muted)
         this.$volume_slider_min.addEventListener(
             'click',
             () => {
+                // save actual volume before muted
+                actual_video_volume = this.$video.volume
                 this.$video.volume = 0
                 this.check_volume_min_max()
-
             }
         )
         // set volume max (not muted)
@@ -145,7 +180,7 @@ class Video_player{
             // mouse move
         const volume_handle_mousemove = ()=>{
             volume_handle_mouseup()
-            this.$volume_slider_bar_container.addEventListener('mousemove', volume_handle_mousemove_function)
+            document.addEventListener('mousemove', volume_handle_mousemove_function)
         }
         const volume_handle_mousemove_function = (_event)=>{
             const bounding = this.$volume_slider_bar.getBoundingClientRect()
@@ -166,7 +201,7 @@ class Video_player{
         const volume_handle_mouseup_function = (_event)=>{
             volume_handle_mousemove_function(_event)
             // remove mousemove eventlistener
-            this.$volume_slider_bar_container.removeEventListener('mousemove', volume_handle_mousemove_function)
+            document.removeEventListener('mousemove', volume_handle_mousemove_function)
             // remove mouseup event listener
             window.removeEventListener('mouseup', volume_handle_mouseup_function)
             this.check_volume_min_max()
@@ -280,7 +315,6 @@ class Video_player{
             window.removeEventListener('mousemove', seek_bar_handle_mousemove_function)
         }
     }
-
     set_show_time(){
         this.$video.addEventListener(
             'timeupdate',
@@ -307,7 +341,7 @@ class Video_player{
                 if(video_current_hours < 10)
                     video_current_hours = `0${video_current_hours}`
                 // show the current time & the duration
-                this.$video_show_time.innerText = `${video_current_hours}:${video_current_mins}:${video_current_seconds}/${video_duration_hours}:${video_duration_mins}:${video_duration_seconds}`
+                this.$video_show_time.innerText = `${video_current_hours}:${video_current_mins}:${video_current_seconds} / ${video_duration_hours}:${video_duration_mins}:${video_duration_seconds}`
             }
         )
         // refresh thumbnail video time when mouving with mouse on the seek bar container
@@ -326,9 +360,99 @@ class Video_player{
         }
         this.$seek_bar_container.addEventListener('mousemove', refresh_thumbnail_video_time)
     }
+    // all methods to enter & exit full screen (simple click on icon, double click, escape)
+    set_fullscreen(){
+        let is_fullscreen = false
+        // on click on fullscreen icon -> fullscreen
+        this.$fullscreen_button.addEventListener(
+            'click',
+            ()=>{
+                goto_fullscreen()
+            }
+        )
+        // on double click on the video -> fullscreen or exit fullscreen
+        this.$video.addEventListener(
+            'dblclick',
+            ()=>{
+                if (!is_fullscreen){
+                    goto_fullscreen()
+                }
+                else{
+                    exit_fullscreen()
+                }
+            }
+        )
+        // on escape key press -> is_fullscreen = false
+        document.addEventListener(
+            'keypress',
+            (_event)=>{
+                if(_event.code == 'Escape' && is_fullscreen){
+                    exit_fullscreen()
+                }
+            }
+        )
+        const goto_fullscreen = ()=>{
+            this.$video.requestFullscreen()
+            is_fullscreen = true
+        }
+        const exit_fullscreen = ()=>{
+            this.$video.webkitExitFullscreen() // compatibility problem (in my case on chrome)
+            // this.$video.exitFullscreen()
+            is_fullscreen = false
+        }
+    }
+    //
+    set_luminosity(){
+    // luminosity slider (light)
+        // mouse move
+        const luminosity_handle_mousemove = ()=>{
+            luminosity_handle_mouseup()
+            document.addEventListener('mousemove', luminosity_handle_mousemove_function)
+        }
+        const luminosity_handle_mousemove_function = (_event)=>{
+            const bounding = this.$luminosity_light_bar.getBoundingClientRect()
+            const ratio = (_event.clientX - bounding.left -5) / (bounding.width-10) // pin width = 5px 
+            let temp = Math.floor(((ratio)*50))/50
+                // include luminosity in 0 to 1
+            if (temp > 1)
+                temp = 1
+            else if (temp < 0){
+                temp = 0
+            }
+            this.$luminosity_light_filter.style.opacity = temp
+            this.$luminosity_light_bar_pin.style.transform = `translate(${temp*100/(100/60)}px)`
+            this.$luminosity_light_bar_level.style.width = `${temp*100/(100/60)}px`
+        }
+            // mouse up
+        const luminosity_handle_mouseup = (_event)=>{window.addEventListener('mouseup', luminosity_handle_mouseup_function)} // muted animation when mouse up if luminosity = 0
+        const luminosity_handle_mouseup_function = (_event)=>{
+            luminosity_handle_mousemove_function(_event)
+            // remove mousemove eventlistener
+            document.removeEventListener('mousemove', luminosity_handle_mousemove_function)
+            // remove mouseup event listener
+            window.removeEventListener('mouseup', luminosity_handle_mouseup_function)
+        }
+            // mouse down
+        this.$luminosity_light_bar_container.addEventListener('mousedown', luminosity_handle_mousemove)
+
+
+
+    // luminosity toggle switch (blue light)
+        // let is_active_blue_light_filter = false
+        // this.$luminosity_blue_light_filter_switch_container.addEventListener(
+        //     'click',
+        //     ()=>{
+        //         if (!is_active_blue_light_filter){
+        //             this.$luminosity_blue_light_filter_switch_pin
+        //         }
+        //     }
+        // )
+
+
+
+
+    }
+
 
 }
-
-
-
 const video_player = new Video_player()
