@@ -43,6 +43,9 @@ class Video_player{
         this.$luminosity_blue_light_filter_switch = this.$luminosity_blue_light_filter_switch_container.querySelector('.js_luminosity_blue_light_filter_switch')
         this.$luminosity_blue_light_filter_switch_pin = this.$luminosity_blue_light_filter_switch_container.querySelector('.js_luminosity_blue_light_filter_switch_pin')
         this.set_luminosity()
+        this.$subtitle_button = this.$video_player.querySelector('.js_subtitle_button')
+        this.$js_video_subtitle = this.$video_player.querySelector('.js_video_subtitle')
+        this.set_subtitle()
     }
     // get & save current time on the video
     set_continue_watching(){
@@ -505,6 +508,33 @@ class Video_player{
                         })
                     })
                 }
+            }
+        )
+    }
+    set_subtitle(){
+        let is_active_subtitle = false
+        this.$subtitle_button.addEventListener(
+            'click',
+            ()=>{
+            if(is_active_subtitle){ // hide subtitle
+                is_active_subtitle = false
+                this.$js_video_subtitle.remove
+                this.$js_video_subtitle.setAttribute('src','') 
+            }
+            else{ // show subtitle
+                is_active_subtitle = true
+                this.$js_video_subtitle.setAttribute('src','medias/subtitles/movie_subtitle.vtt')
+            }}
+        )
+    }
+    set_keyboard_controls(){
+        document.addEventListener(
+            'keypress',
+            (_event)=>{
+                // prevent from double play/pause pressing because of focused element 
+                let isFocused = (document.activeElement === this.$play_pause_button)
+                if(_event.code == 'Space' && !isFocused)
+                    play_pause()
             }
         )
     }

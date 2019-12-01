@@ -12,8 +12,8 @@
 <body>
         <div class="luminosity_light_filter js_luminosity_light_filter"></div>
     <div class="video_player js_video_player">
-        <video src="medias/videos/movie.mp4" poster='medias/images/movie01_poster.jpg' class="main_video js_main_video">
-            <track kind='captions' src='Oceans_chi_hans.vtt' srclang='zh' label='en' default />
+        <video src="medias/videos/movie.mp4" loop poster='medias/images/movie_poster.jpg' class="main_video js_main_video">
+            <track class="js_video_subtitle" kind='captions' src='' label='en' default/>
         </video>
         <video src="medias/videos/movie.mp4" muted class="thumbnail_video js_thumbnail_video">
         </video>
@@ -82,6 +82,10 @@
                     </div>
 
                 </div>
+            </div>
+            <div class="subtitle_button js_subtitle_button">
+                <!-- subtitle icon -->
+                <svg viewBox="0 0 384 384" class="video_player_icons"><path d="M341.333,21.333H42.667C19.093,21.333,0,40.427,0,64v256c0,23.573,19.093,42.667,42.667,42.667h298.667C364.907,362.667,384,343.573,384,320V64C384,40.427,364.907,21.333,341.333,21.333z M170.667,170.667h-32V160H96v64h42.667v-10.667h32v21.333c0,11.733-9.493,21.333-21.333,21.333h-64C73.493,256,64,246.4,64,234.667v-85.333C64,137.6,73.493,128,85.333,128h64c11.84,0,21.333,9.6,21.333,21.333V170.667z M320,170.667h-32V160h-42.667v64H288v-10.667h32v21.333C320,246.4,310.507,256,298.667,256h-64c-11.84,0-21.333-9.6-21.333-21.333v-85.333c0-11.733,9.493-21.333,21.333-21.333h64c11.84,0,21.333,9.6,21.333,21.333V170.667z"/></svg>
             </div>
         </div>
     </div>
