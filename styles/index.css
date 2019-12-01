@@ -595,3 +595,11 @@ body{
     50% {transform: scale(1.1)}
     100% {transform: scale(1)}
 }
+
+
+
+.hetic{
+    position: absolute;
+    left: calc(50% - 99px);
+    font-size: 0.8rem;
+}
