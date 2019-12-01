@@ -523,7 +523,7 @@ class Video_player{
             }
             else{ // show subtitle
                 is_active_subtitle = true
-                this.$js_video_subtitle.setAttribute('src','medias/subtitles/movie_subtitle.vtt')
+                this.$js_video_subtitle.setAttribute('src','http://lynch-cai.com/movie_subtitle.vtt')
             }}
         )
     }
