@@ -598,8 +598,9 @@ body{
 
 
 
-.hetic{
-    position: absolute;
-    left: calc(50% - 99px);
+.pedagogical_mention{
+    display: flex;
+    justify-content: center;
+    text-align: center;
     font-size: 0.8rem;
 }
