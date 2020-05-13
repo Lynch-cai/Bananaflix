@@ -70,7 +70,6 @@ body{
     z-index: 1;
     will-change: transform;
     border: 0.5px solid rgba(0, 0, 0, 0.5);
-    border-radius: 0.5rem 0.5rem 0 0;
     color: white;
     font-size: 0.7rem;
     display: flex;
@@ -88,8 +87,6 @@ body{
     width: 100%;
     height: 70px;
     pointer-events: none;
-    border-radius: 0 0 0.5rem 0.5rem;
-
 }
 
 /* Play pause button */
@@ -368,7 +365,6 @@ body{
     background: rgba(255, 255, 0, 0.075);
     pointer-events: none; /* prevent to click*/ 
     user-select: none;
-    border-radius: 1rem;
     opacity: 0;
     will-change: opacity;
 }
@@ -408,7 +404,7 @@ body{
     height: 70px;
     background: rgba(0, 0, 0, 0.5);
     user-select: none;
-    border-radius: 2rem;
+    border-radius: 0.5rem;
     color: white;
     font-size: 0.7rem;
     display: inline-block;
