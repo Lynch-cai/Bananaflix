@@ -5,7 +5,7 @@ body{
     height: 100vh;
     overflow: hidden;
     font-family: 'Roboto', sans-serif;
-    background: radial-gradient(circle, rgba(255,214,0,1) 42%, rgba(255,188,0,1) 100%);
+    background: #0B0E14;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -15,16 +15,14 @@ body{
     width: 70%;
     height: auto;
     position: relative;
-    border-radius: 15px;
     /* filter: drop-shadow(0 0 2rem white); */
 }
 
 .video_player .main_video{
     object-fit: cover;
-    box-shadow: 0px 0px 1vw black;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
     width: 100%;
     z-index: -5;
-    border-radius: 15px;
 }
 /* hide native control in fullscreen mode */ 
 .video_player .main_video::-webkit-media-controls{
@@ -67,14 +65,14 @@ body{
     width: 6%;
     height: 4%;
     opacity: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
     transform: translate(-16px, -1px);
     z-index: 1;
     will-change: transform;
-    border: 0.5px solid rgba(0, 0, 0, 0.6);
-    border-radius: 10px 10px 0 0;
+    border: 0.5px solid rgba(0, 0, 0, 0.5);
+    border-radius: 0.5rem 0.5rem 0 0;
     color: white;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -90,7 +88,7 @@ body{
     width: 100%;
     height: 70px;
     pointer-events: none;
-    border-radius: 0 0 15px 15px;
+    border-radius: 0 0 0.5rem 0.5rem;
 
 }
 
@@ -207,7 +205,7 @@ body{
 .volume_slider_bar_container .volume_slider_bar{
     position: absolute;
     top: calc(50% - 1.25px); /* 50% - height/2 */
-    border-radius: 60px;
+    border-radius: 4rem;
     height: 2.5px;
     width: 70px;
     background: #fff;
@@ -219,7 +217,7 @@ body{
     left: 0px; 
     transform: translateX(30px); /* 0 for min volume to 60 for max volume */
     top: calc(50% - 5px); /* 50% - height/2 */
-    border-radius: 60px;
+    border-radius: 4rem;
     height: 10px;
     width: 10px;
     background: #FFEA00;
@@ -230,7 +228,7 @@ body{
 .volume_slider_bar_container .volume_slider_bar_level{
     position: absolute;
     top: calc(50% - 1.25px); /* 50% - height/2 */
-    border-radius: 60px;
+    border-radius: 4rem;
     height: 2.5px;
     width: 30px; /* 0 for min volume to 60 for max volume */
     background: #FFEA00;
@@ -252,7 +250,7 @@ body{
     position: absolute;
     left: 0px;
     bottom: -4px;
-    border-radius: 60px;
+    border-radius: 4rem;
     height: 0px;
     width: 0px;
     background: #FFEA00;
@@ -267,7 +265,7 @@ body{
     width: 100%;
     height: 3px; /* 6px when active */
     background: #FFEA00;
-    border-radius: 60px;
+    border-radius: 4rem;
     z-index: 1;
     cursor: pointer;
     transform: scaleX(0);
@@ -281,7 +279,7 @@ body{
     height: 3px; /* 6px when active */
     background: black;
     opacity: 0.2;
-    border-radius: 60px;
+    border-radius: 4rem;
     cursor: pointer;
 }
 /* seek bar animation */
@@ -370,7 +368,7 @@ body{
     background: rgba(255, 255, 0, 0.075);
     pointer-events: none; /* prevent to click*/ 
     user-select: none;
-    border-radius: 15px;
+    border-radius: 1rem;
     opacity: 0;
     will-change: opacity;
 }
@@ -410,7 +408,7 @@ body{
     height: 70px;
     background: rgba(0, 0, 0, 0.5);
     user-select: none;
-    border-radius: 35px;
+    border-radius: 2rem;
     color: white;
     font-size: 0.7rem;
     display: inline-block;
@@ -453,7 +451,7 @@ body{
 }
 .luminosity_menu_container .luminosity_menu_light .luminosity_light_bar{
     position: absolute;
-    border-radius: 60px;
+    border-radius: 4rem;
     height: 2.5px;
     width: 70px;
     background: #fff;
@@ -464,7 +462,7 @@ body{
 
 .luminosity_menu_container .luminosity_menu_light .luminosity_light_bar_level{
     position: absolute;
-    border-radius: 60px;
+    border-radius: 4rem;
     height: 2.5px;
     width: 70px; /* 0 for min volume to 60 for max volume */
     background: #FFEA00;
@@ -479,7 +477,7 @@ body{
 .luminosity_menu_container .luminosity_menu_light .luminosity_light_bar_pin{
     position: absolute;
     transform: translateX(0px); /* 0 for min volume to 60 for max volume */
-    border-radius: 60px;
+    border-radius: 4rem;
     height: 10px;
     width: 10px;
     background: #FFEA00;
@@ -511,7 +509,7 @@ body{
     width: 26px;
     outline: 0;
     background: white;
-    border-radius: 900px;
+    border-radius: 4rem;
     cursor: pointer;
     align-items: center;
 }
@@ -523,7 +521,7 @@ body{
     outline: 0;
     background: white;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
-    border-radius: 900px;
+    border-radius: 100%;
     cursor: pointer;
     align-items: center;
     transform: translateX(-12px);
@@ -603,4 +601,5 @@ body{
     justify-content: center;
     text-align: center;
     font-size: 0.8rem;
+    color: white
 }
