@@ -1,4 +1,4 @@
-https://lynchcai.github.io/Bananaflix/
+https://lynch-cai.github.io/Bananaflix/
 
 Icons made by turkkub from www.flaticon.com
 
